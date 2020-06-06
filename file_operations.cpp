@@ -69,7 +69,7 @@ bool imageoperations::FileOperations::CheckFile(const std::string & _file_name)
 		std::ifstream file(_file_name, std::ios::in | std::ios::binary);
 		if (!file.is_open())
 		{
-			std::cout << "Error on reading input file: " << _file_name << std::endl;
+			//std::cout << "Error on reading input file: " << _file_name << std::endl;
 			return false;
 		}
 		file.close();

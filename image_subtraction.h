@@ -9,7 +9,7 @@ namespace imageoperations {
 	{
 	public:
 
-		ImageSubtraction(const size_t& _width, const size_t& _height);
+		ImageSubtraction();
 		~ImageSubtraction();
 
 		/*
@@ -34,6 +34,8 @@ namespace imageoperations {
 
 		/*
 		* Asynchronous subtraction. Sources are divided into rois to be processed in parallel.
+		* Each thread processes own roi and notifies this function once it's done. Function releases 
+		* the main thread once all threads complete the operation.
 		*
 		* @param img1 source image
 		* @param img2 source image
@@ -73,6 +75,7 @@ namespace imageoperations {
 		// image width & height
 		size_t m_width;
 		size_t m_height;
+		bool m_size_initialized;
 		// mutex to control write operation of the result image
 		static std::mutex m_result_mutex;
 		// thread sleep time to check new source (ms)

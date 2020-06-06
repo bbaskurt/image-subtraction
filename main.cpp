@@ -6,6 +6,12 @@
 
 #include <opencv2/highgui/highgui.hpp>
 
+/*
+* TODO:
+*      - Use log file instead of console output for error message 
+*      - Use Google or Boost test instead of manual testing. (They are not used to prevent 3rd party dependency)
+*/
+
 void display_image(const imageoperations::Image& _img, const std::string& _win_name)
 {
 	//uint8_t* newImg = new uint8_t[1200 * 540];
@@ -116,7 +122,7 @@ int main(int argc, char** argv) {
 	display_image(src_img2, "source2");
 
 	// Subtract images
-	imageoperations::ImageSubtraction imageSubtractor(width, height);
+	imageoperations::ImageSubtraction imageSubtractor;
 	imageSubtractor.SubtractAysnc(src_img1, src_img2, &diff_img);
 	//imageSubtractor.SubtractPixelwise(src_img1, src_img2, diff_img);
 
@@ -127,7 +133,6 @@ int main(int argc, char** argv) {
 
 	imageoperations::test::Tester test_all;
 	test_all.RunAll();
-
 
 	std::system("pause");
 	return 0;

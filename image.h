@@ -7,7 +7,6 @@
 
 namespace imageoperations
 {
-
 	class Image
 	{
 	public:
@@ -18,7 +17,7 @@ namespace imageoperations
 		Image &operator=(const Image& _img);
 
 		/*
-		* Get value of specific pixel
+		* Get value of a specific pixel
 		*
 		* @param col column of the pixel (starting from 0)
 		* @param row row of the pixel (starting from 0)
@@ -27,7 +26,7 @@ namespace imageoperations
 		uint16_t GetPixel(const size_t& _col, const size_t& _row) const;
 
 		/*
-		* Set value of specific pixel
+		* Set value of a specific pixel
 		*
 		* @param col column of the pixel (starting from 0)
 		* @param row row of the pixel (starting from 0)
@@ -46,7 +45,7 @@ namespace imageoperations
 		size_t GetWidth() const;
 
 		/*
-		* Get image size in bytes
+		* Get total image size in bytes
 		*/
 		size_t GetSizeByte() const;
 

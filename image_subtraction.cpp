@@ -3,11 +3,12 @@
 
 std::mutex imageoperations::ImageSubtraction::m_result_mutex;
 
-imageoperations::ImageSubtraction::ImageSubtraction(const size_t& _width, const size_t& _height):
-	m_width(_width),
-	m_height(_height)
+imageoperations::ImageSubtraction::ImageSubtraction():
+	m_width(0),
+	m_height(0),
+	m_size_initialized(false)
 {
-	// do not create threads more than number of cores.
+	// do not create threads more than the number of cores.
 	m_thread_count = std::thread::hardware_concurrency() - 1;
 	m_new_image_received.exchange(false);
 	m_thread_status.exchange(true);
@@ -70,6 +71,13 @@ bool imageoperations::ImageSubtraction::SubtractAysnc(const Image& _img1, const 
 {
 	if (m_workers.empty())
 		return false;
+
+	if (!m_size_initialized && _img1.GetData() != nullptr)
+	{
+		m_width = _img1.GetWidth();
+		m_height = _img1.GetHeight();
+		m_size_initialized = true;
+	}
 
 	m_source1 = _img1;
 	m_source2 = _img2;

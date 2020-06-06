@@ -40,7 +40,7 @@ namespace imageoperations {
 		static bool CheckFile(const std::string& _file_name);
 
 		/*
-		* Remove given file from file system.
+		* Remove given file from the file system.
 		*
 		* @param file_name image file name to be written (with its path)
 		* @return status true if the the file is removed successfully, false if any error occured

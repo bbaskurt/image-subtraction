@@ -134,6 +134,7 @@ void imageoperations::ImageSubtraction::SubtractRoi(const int & _index)
 				}
 				for (int i = 0; i < pix_count; i++)
 				{
+					// no need to use mutex as multiple threads do not write to the same address at the same time.
 					int current_ind = offset + i;
 					if (src1_ptr[current_ind] < src2_ptr[current_ind])
 						result_ptr[current_ind] = 0;

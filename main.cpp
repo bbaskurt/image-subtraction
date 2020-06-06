@@ -125,6 +125,7 @@ int main(int argc, char** argv) {
 	imageoperations::ImageSubtraction imageSubtractor;
 
 	auto start_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	// worth it to use for big images
 	imageSubtractor.SubtractAysnc(src_img1, src_img2, &diff_img);
 	//imageSubtractor.SubtractPixelwise(src_img1, src_img2, diff_img);
 	auto end_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();

@@ -49,7 +49,7 @@ bool imageoperations::FileOperations::WriteImage(imageoperations::Image& _img, c
 	try
 	{
 		uint16_t* data = _img.GetData();
-		std::ofstream file("file.raw", std::ios::out | std::ios::binary);
+		std::ofstream file(_file_name, std::ios::out | std::ios::binary);
 		file.write((char*)data, _img.GetSizeByte());
 		file.close();
 	}
@@ -59,5 +59,35 @@ bool imageoperations::FileOperations::WriteImage(imageoperations::Image& _img, c
 		return false;
 	}
 
+	return true;
+}
+
+bool imageoperations::FileOperations::CheckFile(const std::string & _file_name)
+{
+	try
+	{
+		std::ifstream file(_file_name, std::ios::in | std::ios::binary);
+		if (!file.is_open())
+		{
+			std::cout << "Error on reading input file: " << _file_name << std::endl;
+			return false;
+		}
+		file.close();
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+		return false;
+	}
+	return true;
+}
+
+bool imageoperations::FileOperations::RemoveFile(const std::string & _file_name)
+{
+	if (std::remove(_file_name.c_str()) != 0)
+	{
+		std::cout << "Error on removing file" << std::endl;
+		return false;
+	}
 	return true;
 }

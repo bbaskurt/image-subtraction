@@ -31,6 +31,22 @@ namespace imageoperations {
 		*/
 		bool WriteImage(imageoperations::Image& _img, const std::string& _file_name);
 
+		/*
+		* Check if given file exists and can be opened.
+		*
+		* @param file_name image file name to be written (with its path)
+		* @return status true if the the file is valid, false if any error occured
+		*/
+		static bool CheckFile(const std::string& _file_name);
+
+		/*
+		* Remove given file from file system.
+		*
+		* @param file_name image file name to be written (with its path)
+		* @return status true if the the file is removed successfully, false if any error occured
+		*/
+		static bool RemoveFile(const std::string& _file_name);
+
 	private:
 
 	};

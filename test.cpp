@@ -1,52 +1,22 @@
 #include "test.h"
 #include <iostream>
+#include "test_file_operations.h"
+#include "test_image_subtraction.h"
 
-imageoperations::test::SubtractionTester::SubtractionTester()
+imageoperations::test::Tester::Tester()
 {
 }
 
-imageoperations::test::SubtractionTester::~SubtractionTester()
+imageoperations::test::Tester::~Tester()
 {
 }
 
-bool imageoperations::test::SubtractionTester::TestSubtraction()
+bool imageoperations::test::Tester::RunAll()
 {
-	return false;
-}
+	imageoperations::test::FileOperationsTester fTester;
+	fTester.RunAll();
+	imageoperations::test::ImageSubtractionTester iTester;
+	iTester.RunAll();
 
-bool imageoperations::test::SubtractionTester::TestRead()
-{
-	return false;
-}
-
-bool imageoperations::test::SubtractionTester::TestWrite()
-{
-	return false;
-}
-
-bool imageoperations::test::SubtractionTester::TestTotal()
-{
-	return false;
-}
-
-
-void imageoperations::test::SubtractionTester::CustomAssert(bool _status, const std::string & _test_name)
-{
-	if (_status)
-	{
-		std::cout << _test_name << " passed" << std::endl;
-	}
-	else
-	{
-		std::cout << "----> " << _test_name << " failed!" << std::endl;
-	}
-}
-
-bool imageoperations::test::SubtractionTester::RunAll()
-{
-	CustomAssert(TestSubtraction(), "Image subtraction test");
-	CustomAssert(TestRead(), "Image read test");
-	CustomAssert(TestWrite(), "Image write test");
-
-	return false;
+	return true;
 }

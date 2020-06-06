@@ -1,24 +1,19 @@
 #pragma once
-
-#include "image_subtraction.h"
+#include "test_base.h"
 
 namespace imageoperations
 {
 	namespace test
 	{
-		class SubtractionTester
+		class Tester: public TestBase
 		{
 		public:
-			SubtractionTester();
-			~SubtractionTester();
-			bool TestSubtraction();
-			bool TestRead();
-			bool TestWrite();
-			bool TestTotal();
+			Tester();
+			~Tester();
 			bool RunAll();
 
 		private:
-			void CustomAssert(bool _status, const std::string& _test_name);
+			
 		};
 	}
 }

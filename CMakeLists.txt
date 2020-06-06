@@ -12,6 +12,12 @@ set(subtraction_sources
 	file_operations.cpp
 	image.h
 	image.cpp
+	test_base.h
+	test_base.cpp
+	test_file_operations.h
+	test_file_operations.cpp
+	test_image_subtraction.h
+	test_image_subtraction.cpp
 	test.h
 	test.cpp
 	)	

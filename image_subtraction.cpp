@@ -3,18 +3,19 @@
 
 std::mutex imageoperations::ImageSubtraction::m_result_mutex;
 
-imageoperations::ImageSubtraction::ImageSubtraction():
+imageoperations::ImageSubtraction::ImageSubtraction() :
 	m_width(0),
 	m_height(0),
-	m_size_initialized(false)
+	m_size_initialized(false),
+	m_cycle(0),
+	m_thread_wait_time(1),
+	m_working_counter(0),
+	m_completed_counter(0)
 {
 	// do not create threads more than the number of cores.
 	m_thread_count = std::thread::hardware_concurrency() - 1;
 	m_new_image_received.exchange(false);
 	m_thread_status.exchange(true);
-	m_thread_wait_time = 50;
-	m_working_counter = 0;
-	m_completed_counter = 0;
 
 	// create workers
 	for (int i = 0; i < m_thread_count; i++)
@@ -27,11 +28,11 @@ imageoperations::ImageSubtraction::~ImageSubtraction()
 {
 	m_thread_status.exchange(false);
 	// wait untill all threads to be killed
-	std::this_thread::sleep_for(std::chrono::milliseconds(m_thread_wait_time*2));
+	std::this_thread::sleep_for(std::chrono::milliseconds(m_thread_wait_time * 2));
 
 	for (auto worker : m_workers)
 	{
-		if(worker)
+		if (worker)
 			worker->detach();
 	}
 }
@@ -79,19 +80,23 @@ bool imageoperations::ImageSubtraction::SubtractAysnc(const Image& _img1, const 
 		m_size_initialized = true;
 	}
 
+	//auto start_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	m_source1 = _img1;
 	m_source2 = _img2;
 	m_result = _result_image;
+	//auto end_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	//std::cout << "Image copy time: " << end_time - start_time << std::endl;
 
+	m_cycle++;
 	m_new_image_received.exchange(true);
 
 	// wait until all workers done
 	while (m_completed_counter != m_thread_count)
 	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		// disable new source trigger once all threads received it. 
 		if (m_working_counter == m_thread_count)
 			m_new_image_received.exchange(false);
-		std::this_thread::sleep_for(std::chrono::milliseconds(2));
 	}
 	m_working_counter = 0;
 	m_completed_counter = 0;
@@ -101,10 +106,14 @@ bool imageoperations::ImageSubtraction::SubtractAysnc(const Image& _img1, const 
 
 void imageoperations::ImageSubtraction::SubtractRoi(const int & _index)
 {
+	// prevent to process same roi twice.
+	uint32_t local_cycle = m_cycle;
+
 	while (m_thread_status)
 	{
-		if (m_new_image_received)
+		if (m_new_image_received && m_cycle != local_cycle)
 		{
+			local_cycle = m_cycle;
 			m_working_counter++;
 			uint16_t *src1_ptr = m_source1.GetData();
 			uint16_t *src2_ptr = m_source2.GetData();
@@ -121,7 +130,7 @@ void imageoperations::ImageSubtraction::SubtractRoi(const int & _index)
 				// expand roi for last worker to cover remaining pixels at the end of image. 
 				if (_index == m_thread_count - 1)
 				{
-					pix_count = (m_width * m_height)- offset;
+					pix_count = (m_width * m_height) - offset;
 				}
 				for (int i = 0; i < pix_count; i++)
 				{
@@ -134,10 +143,8 @@ void imageoperations::ImageSubtraction::SubtractRoi(const int & _index)
 			}
 			m_completed_counter++;
 		}
-
 		std::this_thread::sleep_for(std::chrono::milliseconds(m_thread_wait_time));
 	}
-	
 }
 
 bool imageoperations::ImageSubtraction::SubtractBitwise(const Image& _img1, const Image& _img2, Image& _result_image)

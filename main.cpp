@@ -118,15 +118,19 @@ int main(int argc, char** argv) {
 	//	//std::cout << pix << " ";
 	//}
 
-	display_image(src_img1, "source1");
-	display_image(src_img2, "source2");
+	//display_image(src_img1, "source1");
+	//display_image(src_img2, "source2");
 
 	// Subtract images
 	imageoperations::ImageSubtraction imageSubtractor;
+
+	auto start_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	imageSubtractor.SubtractAysnc(src_img1, src_img2, &diff_img);
 	//imageSubtractor.SubtractPixelwise(src_img1, src_img2, diff_img);
+	auto end_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	std::cout << "Process time: " << end_time - start_time << " ms" << std::endl;
 
-	display_image(diff_img, "difference");
+	//display_image(diff_img, "difference");
 
 	// Write result image
 	fileOperator.WriteImage(diff_img, result_name);

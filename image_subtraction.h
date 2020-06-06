@@ -64,6 +64,8 @@ namespace imageoperations {
 		std::atomic<int> m_working_counter;
 		// number of threads completed the process
 		std::atomic<int> m_completed_counter;
+		// number of process
+		std::atomic<uint32_t> m_cycle;
 		// worker threads to process roi of source images
 		std::vector<std::shared_ptr<std::thread> > m_workers;
 		// source image

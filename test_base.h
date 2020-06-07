@@ -5,6 +5,7 @@ namespace imageoperations
 {
 	namespace test
 	{
+		// Test interface 
 		class TestBase
 		{
 		public:

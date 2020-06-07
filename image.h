@@ -55,11 +55,13 @@ namespace imageoperations
 		uint16_t* GetData() const;
 
 	private:
-
+		// Image data. Each pixel is represented by a 16-bit value
 		uint16_t *m_data;
+		// Image width (in pixels)
 		size_t m_width;
+		// Image height (in pixels)
 		size_t m_height;
-		size_t m_size_byte;
-		
+		// Total image size (in bytes)
+		size_t m_size_byte;		
 	};
 }

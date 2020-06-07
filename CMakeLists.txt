@@ -6,6 +6,8 @@ project (image_subtraction)
 
 set(subtraction_sources
 	main.cpp
+	async_operation.h
+	async_operation.cpp
 	image_subtraction.h
 	image_subtraction.cpp
 	file_operations.h

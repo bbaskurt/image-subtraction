@@ -4,30 +4,12 @@
 #include <fstream>
 #include "test.h"
 
-#include <opencv2/highgui/highgui.hpp>
-
 /*
 * TODO:
 *      - Use log file instead of console output for error message 
 *      - Use Google or Boost test instead of manual testing. (They are not used to prevent 3rd party dependency)
+*      - Bitwise subtraction can be used for improvement of run-time performance 
 */
-
-void display_image(const imageoperations::Image& _img, const std::string& _win_name)
-{
-	//uint8_t* newImg = new uint8_t[1200 * 540];
-	uint16_t *src_ptr = _img.GetData();
-	for (int i = 0; i < 1200 * 540; i++)
-	{
-		src_ptr[i] = src_ptr[i] * 255;
-		//std::cout << new_value << " ";
-		//newImg[i] = new_value;
-	}
-	cv::Mat display_image1(cv::Size(540, 1200), CV_16UC1, &_img.GetData()[0], cv::Mat::AUTO_STEP);
-	//cv::Mat display_image1(cv::Size(540, 1200), CV_16U, newImg, cv::Mat::AUTO_STEP);
-	cv::imwrite("test_image_16.png", display_image1);
-	cv::imshow(_win_name, display_image1);
-	cv::waitKey(0);
-}
 
 bool validate_parameters(int argc, char** argv, std::string& file_name1, std::string& file_name2, size_t& width, size_t& height, std::string& result_name)
 {
@@ -109,33 +91,20 @@ int main(int argc, char** argv) {
 	fileOperator.ReadImage(file_name1, width, height, src_img1);
 	fileOperator.ReadImage(file_name2, width, height, src_img2);
 
-	//uint16_t *ptr = src_img1.GetData();
-	//for (int i = 0; i < 540 * 1200; i++)
-	//{
-	//	uint16_t pix = ptr[i];
-	//	if (pix != 1238)
-	//		int xxx = 0;
-	//	//std::cout << pix << " ";
-	//}
-
-	//display_image(src_img1, "source1");
-	//display_image(src_img2, "source2");
-
 	// Subtract images
 	imageoperations::ImageSubtraction imageSubtractor;
 
 	auto start_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	// worth it to use for big images
 	imageSubtractor.SubtractAysnc(src_img1, src_img2, &diff_img);
-	//imageSubtractor.SubtractPixelwise(src_img1, src_img2, diff_img);
+	//imageSubtractor.Subtract(src_img1, src_img2, diff_img);
 	auto end_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	std::cout << "Process time: " << end_time - start_time << " ms" << std::endl;
-
-	//display_image(diff_img, "difference");
 
 	// Write result image
 	fileOperator.WriteImage(diff_img, result_name);
 
+	// Run tests
 	imageoperations::test::Tester test_all;
 	test_all.RunAll();
 

@@ -21,7 +21,7 @@ bool imageoperations::test::ImageSubtractionTester::TestSubtraction()
 	fileOperator.ReadImage(file_name, width, height, src_img);
 	imageoperations::ImageSubtraction imgSubtractor;
 	Image result_img(width, height);
-	imgSubtractor.SubtractPixelwise(src_img, src_img, result_img);
+	imgSubtractor.SubtractAysnc(src_img, src_img, &result_img);
 	if (!IsBlackImage(result_img))
 		return false;
 	return true;

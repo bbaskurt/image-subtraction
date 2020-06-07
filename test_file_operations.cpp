@@ -28,10 +28,10 @@ bool imageoperations::test::FileOperationsTester::TestRemoveFile()
 bool imageoperations::test::FileOperationsTester::TestCheckFile()
 {
 	std::string file_name = "sino800_540x1200.raw";
-	std::string file_name2 = "test.png";
+	//std::string file_name2 = "test.png";
 
-	if (!imageoperations::FileOperations::CheckFile(file_name2))
-		return false;
+	//if (!imageoperations::FileOperations::CheckFile(file_name2))
+	//	return false;
 
 	if (!imageoperations::FileOperations::CheckFile(file_name))
 		return false;
